@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://dangate.dk/wp-content/uploads/2018/02/politi.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://dangate.dk/wp-content/uploads/2018/02/politi.png">
+  <title>Politi</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('test.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+  
+    #container {
+      max-width: 1400px;
+      width: 90%;
+      display: flex;
+      align-items: stretch;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    #emergencyButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width:7.1%;
+    background-color: red;
+    color: #fff;
+    padding: 25px; /* Increased padding */
+    font-size: 20px; /* Optional: Increased font size for better visibility */
+    border: 2px solid white; /* White border with 2px width */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#emergencyButton:hover {
+    background-color: darkred;
+}
+
+#bluelight {
+  background-image: url('blink.png');
+    background-size: cover; /* Tilpas størrelsen af billedet, så det dækker hele baggrunden */
+    background-position: center; /* Centrer billedet */
+    position: absolute;
+    top: 10%;
+    left: 10px;
+    width:7.1%;
+    background-color: #2d2e2a;
+    color: #fff;
+    padding: 30px; /* Increased padding */
+    font-size: 16px; /* Optional: Increased font size for better visibility */
+    border: 2px solid white; /* White border with 2px width */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#bluelight:hover {
+    background-color: #5989eb;
+}
+
+#navigation {
+  background-image: url('blink.png');
+    background-size: cover; /* Tilpas størrelsen af billedet, så det dækker hele baggrunden */
+    background-position: center; /* Centrer billedet */
+    position: absolute;
+    top: 21.5%;
+    left: 10px;
+    bottom: 650px;
+    width:7.1%;
+    background-color: #2d2e2a;
+    color: #fff;
+    padding: 30px; /* Increased padding */
+    font-size: 16px; /* Optional: Increased font size for better visibility */
+    border: 2px solid white; /* White border with 2px width */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#navigation:hover {
+    background-color: #5989eb;
+}
+
+  
+    .tab-button {
+      background-color: #1e1e1e;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
+    }
+  
+    .tab-button:hover {
+      background-color: #333;
+    }
+  
+    #audioContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      overflow: hidden;
+    }
+  
+    .tab-content {
+      flex: 1;
+      padding: 20px;
+      display: none;
+      border-radius: 10px;
+      background-color: #141414;
+    }
+  
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    #myAudio {
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+  
+    h2 {
+      color: #ffffff;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+  
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    button {
+      background-color: #1976D2;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  
+    button:hover {
+      background-color: #1565C0;
+    }
+  
+    input[type="range"] {
+      width: 70%; /* Adjusted width */
+      margin: 0 auto; /* Centering the slider */
+      display: block; /* Ensuring block-level display for centering */
+    }
+  
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #ccc;
+    }
+  
+    #mapContainer {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      border: 2px solid white; /* White border with 2px width */
+      border-radius: 5px;
+    }
+  
+    #map {
+      width: 100%;
+      height: 100%;
+      transition: filter 0.5s ease;
+    }
+  
+    #mapOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      filter: blur(5px);
+    }
+  
+    .nigtext {
+      margin-left: 255px;
+    }
+  </style>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="sidebar">
+       <button id="emergencyButton">NØD</button>
+        <a href="blink.html"><button id="bluelight">BLÅ BLINK</button></a>
+        <button id="navigation">NAVIGATION</button>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    </div>
+
+    <div id="audioContainer">
+
+        <div class="button-container">
+
+
+
+
+      <div id="settingsTab" class="tab-content">
+
+      </div>
+    </div>
+
+    <div id="mapContainer">
+      <div id="mapOverlay"></div>
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var audio = document.getElementById("myAudio");
+    var toggleButton = document.getElementById("toggleButton");
+    var volumeSlider = document.getElementById("volumeSlider");
+    var loopButton = document.getElementById("loopButton");
+    var isLooping = false;
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        audio.loop = true;
+        isLooping = true;
+        toggleButton.innerHTML = "Toggle Siren";
+      } else {
+        audio.pause();
+        audio.loop = true;
+        isLooping = true;
+        toggleButton.innerHTML = "Toggle Siren";
+      }
+    }
+
+    function changeVolume(volume) {
+      audio.volume = volume;
+    }
+
+    function blurMap(event) {
+      event.preventDefault();
+      var mapOverlay = document.getElementById("mapOverlay");
+      mapOverlay.style.filter = "blur(5px)";
+    }
+
+    function openTab(tabId) {
+      var tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(function (tab) {
+        tab.classList.remove('active');
+      });
+
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var mapContainer = document.getElementById("mapContainer");
+      var audioContainer = document.getElementById("audioContainer");
+
+      mapContainer.style.height = mapContainer.offsetWidth * 0.5625 + "px";
+      audioContainer.style.height = mapContainer.style.height;
+
+      // Get user's location based on IP
+      fetch('https://ipinfo.io/json')
+        .then(response => response.json())
+        .then(data => {
+          // Extract latitude and longitude from the "loc" field
+          var [lat, lon] = data.loc.split(',');
+
+          var map = L.map('map').setView([parseFloat(lat), parseFloat(lon)], 13);
+
+          L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=ZXwcuXruOVaa6kPLkQcF', {
+            tileSize: 512,
+            zoomOffset: -1,
+            detectRetina: true,
+          }).addTo(map);
+        })
+        .catch(error => {
+          console.error('Error fetching user location:', error);
+        });
+    });
+  </script>
+</body>
+
+</html>
