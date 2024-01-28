@@ -1,54 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url('bag1.gif');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Politi - Made by Kaos & Bechman</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <style>
-    /* Your CSS styles remain unchanged */
-  </style>
-</head>
+.klok-container {
+    text-align: center;
+}
 
-<body>
-  <div id="container">
-    <div id="sidebar">
-      <div id="tabs">
-        <div class="tab" onclick="showCategory('map')">Map</div>
-      </div>
-    </div>
+.digital-clock {
+    font-size: 4em;
+    color: #ffcc00;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
 
-    <div id="mapContainer" class="content">
-      <div id="map"></div>
-    </div>
-
-    <!-- Notification box -->
-    <div class="notification" id="notificationBox"></div>
-  </div>
-
-  <script>
-    // Use only one function for showCategory
-    function showCategory(category) {
-      if (category === 'map') {
-        // Use mapContainer instead of audioContainer
-        document.getElementById('mapContainer').style.display = 'flex';
-      }
+/* Tilføjet for bedre responsivitet */
+@media (max-width: 768px) {
+    .digital-clock {
+        font-size: 3em;
     }
-  </script>
+}
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    // The following script initializes the Leaflet map
-    var map = L.map('map').setView([51.505, -0.09], 13);
-
-    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://opentopomap.org/#map">OpenTopoMap</a>'
-    }).addTo(map);
-
-    // Set the height of the map container to maintain 16:9 aspect ratio
-    document.getElementById('mapContainer').style.height = "100%"; // Set height to 100%
-  </script>
-</body>
-
-</html>
+/* Tilføjet hover-effekt til ur-container */
+.klok-container:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
